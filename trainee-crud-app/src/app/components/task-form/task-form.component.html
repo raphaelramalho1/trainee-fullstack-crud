@@ -1,0 +1,122 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="btn btn-light btn-sm me-3" routerLink="/tarefas">
+      ← Voltar
+    </a>
+    <span class="navbar-brand mb-0">{{ isEditMode() ? 'Editar Tarefa' : 'Nova Tarefa' }}</span>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title mb-0">
+        {{ isEditMode() ? 'Editar Tarefa' : 'Criar Nova Tarefa' }}
+      </h5>
+    </div>
+
+    <div class="card-body">
+      @if (loading()) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+          </div>
+          <p class="mt-2">{{ isEditMode() ? 'Carregando tarefa...' : 'Salvando...' }}</p>
+        </div>
+      } @else {
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="mb-3">
+            <label for="title" class="form-label">Título *</label>
+            <input 
+              type="text" 
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('title')"
+              id="title"
+              formControlName="title" 
+              placeholder="Digite o título da tarefa">
+            @if (isFieldInvalid('title')) {
+              <div class="invalid-feedback">
+                {{ getFieldError('title') }}
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Descrição</label>
+            <textarea 
+              class="form-control"
+              id="description"
+              formControlName="description" 
+              placeholder="Digite uma descrição (opcional)"
+              rows="3">
+            </textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="dueDate" class="form-label">Data de Vencimento *</label>
+            <input 
+              type="date"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('dueDate')"
+              id="dueDate"
+              formControlName="dueDate">
+            @if (isFieldInvalid('dueDate')) {
+              <div class="invalid-feedback">{{ getFieldError('dueDate') }}</div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="priority" class="form-label">Prioridade *</label>
+            <select 
+              class="form-select"
+              [class.is-invalid]="isFieldInvalid('priority')"
+              id="priority"
+              formControlName="priority">
+              <option value="low">Baixa</option>
+              <option value="medium">Média</option>
+              <option value="high">Alta</option>
+            </select>
+            @if (isFieldInvalid('priority')) {
+              <div class="invalid-feedback">{{ getFieldError('priority') }}</div>
+            }
+          </div>
+
+          @if (isEditMode()) {
+            <div class="mb-3">
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="completed"
+                  formControlName="completed">
+                <label class="form-check-label" for="completed">
+                  Tarefa concluída
+                </label>
+              </div>
+            </div>
+          }
+
+          <div class="d-flex gap-2 justify-content-end">
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary"
+              (click)="goBack()">
+              Cancelar
+            </button>
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              [disabled]="taskForm.invalid || saving()">
+              @if (saving()) {
+                <span class="spinner-border spinner-border-sm me-2" role="status">
+                  <span class="visually-hidden">Salvando...</span>
+                </span>
+              }
+              {{ isEditMode() ? 'Atualizar' : 'Criar' }}
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>
