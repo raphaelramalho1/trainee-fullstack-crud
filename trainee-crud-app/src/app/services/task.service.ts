@@ -11,13 +11,11 @@ export class TaskService {
   private http = inject(HttpClient);
   private readonly API_URL = `${environment.apiUrl}/tasks`;
 
-  // Signals para gerenciamento de estado
   private tasksSignal = signal<Task[]>([]);
   private loadingSignal = signal<boolean>(false);
   private errorSignal = signal<string | null>(null);
   private filterSignal = signal<'all' | 'pending' | 'completed'>('all');
 
-  // Computed signals simplificados
   readonly loading = this.loadingSignal.asReadonly();
   readonly error = this.errorSignal.asReadonly();
   readonly filter = this.filterSignal.asReadonly();
@@ -33,17 +31,13 @@ export class TaskService {
     }
   });
 
-  // Getters simples para contadores
   get totalTasks() { return this.tasksSignal().length; }
   get completedTasks() { return this.tasksSignal().filter(t => t.completed); }
   get pendingTasks() { return this.tasksSignal().filter(t => !t.completed); }
-
-  // Métodos de filtro
   setFilter(filter: 'all' | 'pending' | 'completed') {
     this.filterSignal.set(filter);
   }
 
-  // Métodos CRUD
   async loadTasks(): Promise<void> {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
