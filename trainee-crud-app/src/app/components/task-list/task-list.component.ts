@@ -61,10 +61,6 @@ export class TaskListComponent implements OnInit {
     return this.updatingIds.has(id);
   }
 
-  trackById(index: number, item: Task): number {
-    return item.id;
-  }
-
   async deleteTask(task: Task) {
     if (confirm(`Excluir "${task.title}"?`)) {
       try {
@@ -75,7 +71,7 @@ export class TaskListComponent implements OnInit {
     }
   }
 
-  formatDate(date: Date): string {
+  formatDate(date: string | Date): string {
     return new Date(date).toLocaleDateString('pt-BR');
   }
 

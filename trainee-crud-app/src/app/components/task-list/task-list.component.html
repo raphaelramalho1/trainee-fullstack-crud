@@ -124,12 +124,14 @@
                         <a 
                           class="btn btn-outline-primary" 
                           [routerLink]="['/tarefas/editar', task.id]"
+                          [attr.aria-label]="'Editar tarefa: ' + task.title"
                           title="Editar">
                           ✏️
                         </a>
                         <button 
                           class="btn btn-outline-danger" 
                           (click)="deleteTask(task)"
+                          [attr.aria-label]="'Excluir tarefa: ' + task.title"
                           title="Excluir">
                           🗑️
                         </button>

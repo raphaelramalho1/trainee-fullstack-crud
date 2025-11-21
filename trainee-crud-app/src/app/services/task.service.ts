@@ -65,6 +65,7 @@ export class TaskService {
     } catch (error) {
       this.errorSignal.set('Erro ao criar tarefa');
       console.error('Erro ao criar tarefa:', error);
+      throw error;
     } finally {
       this.loadingSignal.set(false);
     }

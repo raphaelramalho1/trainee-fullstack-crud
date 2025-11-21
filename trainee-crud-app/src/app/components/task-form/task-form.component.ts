@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { TaskService } from '../../services/task.service';
@@ -15,6 +15,7 @@ import { TaskService } from '../../services/task.service';
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss'
 })
+
 export class TaskFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
@@ -89,7 +90,7 @@ export class TaskFormComponent implements OnInit {
           this.taskForm.patchValue({
             title: task.title,
             description: task.description || '',
-            dueDate: task.dueDate, // Já vem como string do backend
+            dueDate: task.dueDate, 
             priority: task.priority,
             completed: task.completed
           });
@@ -111,10 +112,10 @@ export class TaskFormComponent implements OnInit {
       try {
         const formValue = this.taskForm.value;
         const taskData = {
-          title: formValue.title,
+          title: formValue.title!,
           description: formValue.description || undefined,
-          dueDate: formValue.dueDate, // Input type="date" já retorna string no formato YYYY-MM-DD
-          priority: formValue.priority,
+          dueDate: formValue.dueDate!,
+          priority: formValue.priority!,
           completed: formValue.completed || false
         };
 

@@ -2,11 +2,11 @@ export interface Task {
   id: number;
   title: string;
   description?: string;
-  dueDate: Date;
+  dueDate: string;
   completed: boolean;
   priority: 'low' | 'medium' | 'high';
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateTaskDto {
