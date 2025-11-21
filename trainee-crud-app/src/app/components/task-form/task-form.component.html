@@ -1,18 +1,14 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-dark bg-primary">
   <div class="container">
-    <a class="btn btn-light btn-sm me-3" routerLink="/tarefas">
-      ← Voltar
-    </a>
-    <span class="navbar-brand mb-0">{{ isEditMode() ? 'Editar Tarefa' : 'Nova Tarefa' }}</span>
+    <a class="btn btn-light btn-sm me-3" routerLink="/tarefas">← Voltar</a>
+    <span class="navbar-brand">{{ isEditMode() ? 'Editar Tarefa' : 'Nova Tarefa' }}</span>
   </div>
 </nav>
 
 <div class="container mt-4">
   <div class="card">
     <div class="card-header">
-      <h5 class="card-title mb-0">
-        {{ isEditMode() ? 'Editar Tarefa' : 'Criar Nova Tarefa' }}
-      </h5>
+      <h5>{{ isEditMode() ? 'Editar Tarefa' : 'Criar Nova Tarefa' }}</h5>
     </div>
 
     <div class="card-body">
@@ -24,7 +20,7 @@
           <p class="mt-2">{{ isEditMode() ? 'Carregando tarefa...' : 'Salvando...' }}</p>
         </div>
       } @else {
-        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" novalidate [attr.aria-busy]="saving()">
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" novalidate>
           <div class="mb-3">
             <label for="title" class="form-label">Título *</label>
             <input 
@@ -34,11 +30,9 @@
               [disabled]="saving()"
               id="title"
               formControlName="title" 
-              placeholder="Digite o título da tarefa">
+              placeholder="Digite o título">
             @if (isFieldInvalid('title')) {
-              <div class="invalid-feedback">
-                {{ getFieldError('title') }}
-              </div>
+              <div class="invalid-feedback">{{ getFieldError('title') }}</div>
             }
           </div>
 
@@ -49,7 +43,7 @@
               [disabled]="saving()"
               id="description"
               formControlName="description" 
-              placeholder="Digite uma descrição (opcional)"
+              placeholder="Descrição (opcional)"
               rows="3">
             </textarea>
           </div>
@@ -114,9 +108,7 @@
               class="btn btn-primary"
               [disabled]="taskForm.invalid || saving()">
               @if (saving()) {
-                <span class="spinner-border spinner-border-sm me-2" role="status">
-                  <span class="visually-hidden">Salvando...</span>
-                </span>
+                <span class="spinner-border spinner-border-sm me-2"></span>
               }
               {{ isEditMode() ? 'Atualizar' : 'Criar' }}
             </button>

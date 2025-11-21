@@ -1,17 +1,14 @@
-<!-- Bootstrap Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-dark bg-primary">
   <div class="container">
     <span class="navbar-brand">Gerenciador de Tarefas</span>
-    <a class="btn btn-light" routerLink="/tarefas/nova">
-      ➕ Nova Tarefa
-    </a>
+    <a class="btn btn-light" routerLink="/tarefas/nova">➕ Nova Tarefa</a>
   </div>
 </nav>
 
 <div class="container mt-4">
   <div class="card">
     <div class="card-header">
-      <h5 class="card-title mb-1">Lista de Tarefas</h5>
+      <h5 class="mb-1">Lista de Tarefas</h5>
       <small class="text-muted">
         Total: {{ taskService.totalTasks }} | 
         Pendentes: {{ taskService.pendingTasks.length }} | 
@@ -20,24 +17,18 @@
     </div>
 
     <div class="card-body">
-      <div class="btn-group mb-3 d-flex justify-content-center" role="group">
-        <input type="radio" class="btn-check" name="filter" id="all" value="all" 
+      <div class="btn-group mb-3 d-flex" role="group">
+        <input type="radio" class="btn-check" name="filter" id="all" 
                [checked]="taskService.filter() === 'all'" (change)="onFilterChange('all')">
-        <label class="btn btn-outline-primary" for="all">
-          📋 Todas ({{ taskService.totalTasks }})
-        </label>
+        <label class="btn btn-outline-primary" for="all">Todas ({{ taskService.totalTasks }})</label>
         
-        <input type="radio" class="btn-check" name="filter" id="pending" value="pending"
+        <input type="radio" class="btn-check" name="filter" id="pending"
                [checked]="taskService.filter() === 'pending'" (change)="onFilterChange('pending')">
-        <label class="btn btn-outline-info" for="pending">
-          ⏰ Pendentes ({{ taskService.pendingTasks.length }})
-        </label>
+        <label class="btn btn-outline-info" for="pending">Pendentes ({{ taskService.pendingTasks.length }})</label>
         
-        <input type="radio" class="btn-check" name="filter" id="completed" value="completed"
+        <input type="radio" class="btn-check" name="filter" id="completed"
                [checked]="taskService.filter() === 'completed'" (change)="onFilterChange('completed')">
-        <label class="btn btn-outline-secondary" for="completed">
-          ✅ Concluídas ({{ taskService.completedTasks.length }})
-        </label>
+        <label class="btn btn-outline-secondary" for="completed">Concluídas ({{ taskService.completedTasks.length }})</label>
       </div>
 
       @if (taskService.loading()) {
@@ -47,28 +38,18 @@
           </div>
           <p class="mt-2">Carregando tarefas...</p>
         </div>
-      } @else if (taskService.error()) {
-        <div class="alert alert-danger text-center" role="alert">
-          <h4 class="alert-heading">⚠️ Erro!</h4>
-          <p>{{ taskService.error() }}</p>
-          <button class="btn btn-primary" (click)="taskService.loadTasks()">
-            🔄 Tentar Novamente
-          </button>
-        </div>
       } @else {
         @if (taskService.filteredTasks().length === 0) {
           <div class="text-center py-5">
             @if (taskService.totalTasks === 0) {
-              <!-- Primeira vez / Lista completamente vazia -->
-              <h3>🚀 Comece criando sua primeira tarefa!</h3>
-              <p class="text-muted">Organize suas atividades de forma simples e eficiente</p>
+              <h3>Comece criando sua primeira tarefa!</h3>
+              <p class="text-muted">Organize suas atividades</p>
             } @else {
-              <!-- Filtro sem resultados -->
-              <h3>🔍 Nenhuma tarefa {{ currentFilterLabel.toLowerCase() }}</h3>
-              <p class="text-muted">Tente outro filtro ou crie uma nova tarefa</p>
+              <h3>Nenhuma tarefa {{ currentFilterLabel.toLowerCase() }}</h3>
+              <p class="text-muted">Tente outro filtro</p>
             }
             <a class="btn btn-primary mt-2" routerLink="/tarefas/nova">
-              ➕ {{ taskService.totalTasks === 0 ? 'Criar Primeira Tarefa' : 'Nova Tarefa' }}
+              {{ taskService.totalTasks === 0 ? 'Criar Primeira Tarefa' : 'Nova Tarefa' }}
             </a>
           </div>
         } @else {
@@ -88,30 +69,20 @@
                 @for (task of taskService.filteredTasks(); track task.id) {
                   <tr [class.table-success]="task.completed">
                     <td>
-                      <div class="form-check">
-                        <input 
-                          class="form-check-input" 
-                          type="checkbox" 
-                          [checked]="task.completed"
-                          [disabled]="isUpdating(task.id) || taskService.loading()"
-                          (change)="toggleCompleted(task)"
-                          [id]="'task-' + task.id">
-                        <label class="form-check-label" [for]="'task-' + task.id">
-                          {{ task.completed ? '✅' : '⏳' }}
-                        </label>
-                      </div>
+                      <input 
+                        class="form-check-input" 
+                        type="checkbox" 
+                        [checked]="task.completed"
+                        [disabled]="isUpdating(task.id)"
+                        (change)="toggleCompleted(task)">
                     </td>
-                    <td>
-                      <span [class.text-decoration-line-through]="task.completed" 
-                            [class.text-muted]="task.completed">
-                        {{ task.title }}
-                      </span>
+                    <td [class.text-decoration-line-through]="task.completed" 
+                        [class.text-muted]="task.completed">
+                      {{ task.title }}
                     </td>
-                    <td>
-                      <span [class.text-decoration-line-through]="task.completed" 
-                            [class.text-muted]="task.completed">
-                        {{ task.description || '-' }}
-                      </span>
+                    <td [class.text-decoration-line-through]="task.completed" 
+                        [class.text-muted]="task.completed">
+                      {{ task.description || '-' }}
                     </td>
                     <td>{{ formatDate(task.dueDate) }}</td>
                     <td>
@@ -120,22 +91,10 @@
                       </span>
                     </td>
                     <td>
-                      <div class="btn-group btn-group-sm" role="group">
-                        <a 
-                          class="btn btn-outline-primary" 
-                          [routerLink]="['/tarefas/editar', task.id]"
-                          [attr.aria-label]="'Editar tarefa: ' + task.title"
-                          title="Editar">
-                          ✏️
-                        </a>
-                        <button 
-                          class="btn btn-outline-danger" 
-                          (click)="deleteTask(task)"
-                          [attr.aria-label]="'Excluir tarefa: ' + task.title"
-                          title="Excluir">
-                          🗑️
-                        </button>
-                      </div>
+                      <a class="btn btn-sm btn-outline-primary me-1" 
+                         [routerLink]="['/tarefas/editar', task.id]">Editar</a>
+                      <button class="btn btn-sm btn-outline-danger" 
+                              (click)="deleteTask(task)">Excluir</button>
                     </td>
                   </tr>
                 }

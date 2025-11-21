@@ -1,35 +1,30 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
-  templateUrl: './task-list.component.html',
-  styleUrl: './task-list.component.scss'
+  imports: [CommonModule, RouterModule],
+  templateUrl: './task-list.component.html'
 })
 export class TaskListComponent implements OnInit {
   taskService = inject(TaskService);
   updatingIds = new Set<number>();
 
-  readonly priorities = {
+  priorities = {
     high: { label: 'Alta', class: 'bg-primary' },
     medium: { label: 'Média', class: 'bg-info' },
     low: { label: 'Baixa', class: 'bg-secondary' }
-  } as const;
+  };
 
-  readonly filterLabels = {
+  filterLabels = {
     all: 'Todas',
     pending: 'Pendentes', 
     completed: 'Concluídas'
-  } as const;
+  };
 
   ngOnInit() {
     this.taskService.loadTasks();
@@ -45,33 +40,24 @@ export class TaskListComponent implements OnInit {
 
   async toggleCompleted(task: Task) {
     this.updatingIds.add(task.id);
-    
     try {
-      await this.taskService.updateTask(task.id, { 
-        completed: !task.completed 
-      });
-    } catch (error) {
-      console.error('Erro ao atualizar tarefa');
+      await this.taskService.updateTask(task.id, { completed: !task.completed });
     } finally {
       this.updatingIds.delete(task.id);
     }
   }
 
-  isUpdating(id: number): boolean {
+  isUpdating(id: number) {
     return this.updatingIds.has(id);
   }
 
   async deleteTask(task: Task) {
     if (confirm(`Excluir "${task.title}"?`)) {
-      try {
-        await this.taskService.deleteTask(task.id);
-      } catch (error) {
-        console.error('Erro ao excluir tarefa');
-      }
+      await this.taskService.deleteTask(task.id);
     }
   }
 
-  formatDate(date: string | Date): string {
+  formatDate(date: string) {
     return new Date(date).toLocaleDateString('pt-BR');
   }
 
